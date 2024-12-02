@@ -1,0 +1,17 @@
+.gameBoard {
+    position: relative;
+    top: 120px;
+    left: 15px;
+    width: 532px;
+    height: 379px;
+    background:url("../../src/assets/gameBg.jpg") center center/cover;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+@media (max-width: 768px) {
+    .gameBoard{
+        width: 100%;
+    }
+}
+

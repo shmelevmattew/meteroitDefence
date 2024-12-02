@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import {useState, useEffect, FC} from 'react'
 import styles from '../styles/Meteor.module.css'
 
 interface MeteorProps {
@@ -11,14 +11,14 @@ interface MeteorProps {
     onReachBottom: () => void
 }
 
-export const Meteor: React.FC<MeteorProps> = ({ id, x, size, onDestroy, onReachBottom }) => {
+export const Meteor: FC<MeteorProps> = ({ id, x, size, onDestroy, onReachBottom }) => {
     const [clicks, setClicks] = useState(0)
     const [y, setY] = useState(-50)
 
     useEffect(() => {
         const interval = setInterval(() => {
             setY(prevY => {
-                if (prevY >= 400) {
+                if (prevY >= 280) {
                     clearInterval(interval)
                     onReachBottom()
                     return prevY

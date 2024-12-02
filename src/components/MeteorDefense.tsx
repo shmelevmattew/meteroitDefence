@@ -30,7 +30,6 @@ export default function MeteorDefense() {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Защита от метеоритов</h1>
             {!isGameStarted || gameOver ? (
                 <div className={styles.gameOver}>
                     <DifficultySelector difficulty={difficulty} setDifficulty={setDifficulty} />
@@ -43,12 +42,13 @@ export default function MeteorDefense() {
                 </div>
             ) : (
                 <>
-                    <div className={styles.score}>Счет: {score}</div>
+                    {/*<div className={styles.score}>Счет: {score}</div>*/}
                     <GameBoard
                         difficulty={difficulty}
                         gameOver={gameOver}
                         onGameOver={handleGameOver}
                         onMeteorDestroyed={incrementScore}
+                        score={score}
                     />
                 </>
             )}

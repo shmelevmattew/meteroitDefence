@@ -1,12 +1,13 @@
 import { Button } from './Button'
 import styles from '../styles/DifficultySelector.module.css'
+import {FC} from "react";
 
 interface DifficultySelectorProps {
     difficulty: string
     setDifficulty: (difficulty: string) => void
 }
 
-export const DifficultySelector: React.FC<DifficultySelectorProps> = ({ difficulty, setDifficulty }) => {
+export const DifficultySelector: FC<DifficultySelectorProps> = ({ difficulty, setDifficulty }) => {
     return (
         <div className={styles.container}>
             <Button
