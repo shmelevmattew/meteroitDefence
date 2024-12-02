@@ -28,6 +28,7 @@
 .gameOverText {
     font-size: 1.5rem;
     margin-top: 1rem;
+    color: #3b82f6;
 }
 
 @media (max-width: 786px) {

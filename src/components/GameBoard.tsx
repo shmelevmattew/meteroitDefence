@@ -9,7 +9,7 @@ import Confetti from 'react-confetti'
 import {difficultiesEnum, generalSettings, settings} from "../consts/settings";
 
 interface GameBoardProps {
-    difficulty: string
+    difficulty: keyof typeof difficultiesEnum
     gameOver: boolean
     onGameOver: () => void
     onMeteorDestroyed: ( score : number ) => void
@@ -28,14 +28,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ difficulty, gameOver, onGa
             return
         }
         const interval = setInterval(() => {
-            setMeteors(prevMeteors => [...prevMeteors, generateMeteor(difficulty)])
-        }, difficulty === 'easy' ? settings[difficultiesEnum.easy].meteorInterval : difficulty === 'medium' ? settings[difficultiesEnum.normal].meteorInterval  : settings[difficultiesEnum.hard].meteorInterval )
+            setMeteors(prevMeteors => [...prevMeteors, generateMeteor()])
+        }, settings[difficultiesEnum[difficulty]].meteorInterval)
 
         return () => clearInterval(interval)
     }, [difficulty, gameOver])
 
     const handleMeteorDestroy = (id: number, score : number) => {
-        console.log(id)
         setMeteors(prevMeteors => prevMeteors.filter(meteor => meteor.id !== id))
         onMeteorDestroyed(score)
     }
@@ -45,8 +44,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({ difficulty, gameOver, onGa
     }
 
     useEffect(()=>{
-        const dividedScore = Math.floor(score % generalSettings.celebrationPerScore)
-        if(dividedScore > previousCelebrationScore && previousCelebrationScore > 0 ){
+        const dividedScore = Math.floor(score / generalSettings.celebrationPerScore)
+        console.log(dividedScore)
+
+        if(dividedScore > previousCelebrationScore && dividedScore !== 0 ){
             setPreviousCelebrationScore(dividedScore)
             setConffeti(true)
             const timeout = setTimeout(()=>{

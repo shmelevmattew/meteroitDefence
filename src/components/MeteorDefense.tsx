@@ -6,9 +6,11 @@ import { DifficultySelector } from './DifficultySelector'
 import { Button } from './Button'
 import { useGameState } from '../hooks/useGameState'
 import styles from '../styles/MeteorDefense.module.css'
+import {difficultiesEnum} from "../consts/settings";
 
 export default function MeteorDefense() {
     const [isGameStarted, setIsGameStarted] = useState(false)
+    const [showHelpModal,setShowHelpModal] = useState(false)
     const {
         score,
         difficulty,
@@ -28,11 +30,12 @@ export default function MeteorDefense() {
         setGameOver(true)
     }
 
+
     return (
         <div className={styles.container}>
             {!isGameStarted || gameOver ? (
                 <div className={styles.gameOver}>
-                    <DifficultySelector difficulty={difficulty} setDifficulty={setDifficulty} />
+                    <DifficultySelector difficulty={difficulty as difficultiesEnum} setDifficulty={setDifficulty} />
                     <Button onClick={startGame}>
                         {gameOver ? 'Играть снова' : 'Начать игру'}
                     </Button>
@@ -44,7 +47,7 @@ export default function MeteorDefense() {
                 <>
                     {/*<div className={styles.score}>Счет: {score}</div>*/}
                     <GameBoard
-                        difficulty={difficulty}
+                        difficulty={difficulty as any}
                         gameOver={gameOver}
                         onGameOver={handleGameOver}
                         onMeteorDestroyed={incrementScore}

@@ -10,6 +10,7 @@
 .primary {
     background-color: #3b82f6;
     color: white;
+    font-family: "Pixel",sans-serif;
 }
 
 .primary:hover {
@@ -19,7 +20,7 @@
 .outline {
     background-color: transparent;
     color: #3b82f6;
-
+    font-family: "Pixel",sans-serif;
     border: none;
 }
 
