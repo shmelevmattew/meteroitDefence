@@ -16,3 +16,8 @@
     background: url("../../src/assets/bigMeteorite.png") center center/cover;
 }
 
+.bonus {
+    width: 3rem;
+    height: 3rem;
+    background: url("../../src/assets/bonusMeteorite.png") center center/cover;
+}

@@ -4,20 +4,22 @@ import {useEffect, useRef, useState} from 'react'
 import { Meteor } from './Meteor'
 import { generateMeteor } from '../utils/meteorUtils'
 import styles from '../styles/GameBoard.module.css'
-import {difficultySettings, generalSettings} from "../consts/difficultySettings";
+
 import Confetti from 'react-confetti'
+import {difficultiesEnum, generalSettings, settings} from "../consts/settings";
 
 interface GameBoardProps {
     difficulty: string
     gameOver: boolean
     onGameOver: () => void
-    onMeteorDestroyed: () => void
+    onMeteorDestroyed: ( score : number ) => void
     score : number
 }
 
 export const GameBoard: React.FC<GameBoardProps> = ({ difficulty, gameOver, onGameOver, onMeteorDestroyed , score }) => {
     const [meteors, setMeteors] = useState<any[]>([])
     const [conffeti,setConffeti] = useState<any>(false)
+    const [previousCelebrationScore , setPreviousCelebrationScore] = useState<number>(0)
     //width: 532px;
     //     height: 379px;
     useEffect(() => {
@@ -25,17 +27,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({ difficulty, gameOver, onGa
             setMeteors([])
             return
         }
-
         const interval = setInterval(() => {
             setMeteors(prevMeteors => [...prevMeteors, generateMeteor(difficulty)])
-        }, difficulty === 'easy' ? difficultySettings.easy.meteorInterval : difficulty === 'medium' ? difficultySettings.normal.meteorInterval : difficultySettings.hard.meteorInterval)
+        }, difficulty === 'easy' ? settings[difficultiesEnum.easy].meteorInterval : difficulty === 'medium' ? settings[difficultiesEnum.normal].meteorInterval  : settings[difficultiesEnum.hard].meteorInterval )
 
         return () => clearInterval(interval)
     }, [difficulty, gameOver])
 
-    const handleMeteorDestroy = (id: number) => {
+    const handleMeteorDestroy = (id: number, score : number) => {
+        console.log(id)
         setMeteors(prevMeteors => prevMeteors.filter(meteor => meteor.id !== id))
-        onMeteorDestroyed()
+        onMeteorDestroyed(score)
     }
 
     const handleMeteorReachBottom = () => {
@@ -43,7 +45,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ difficulty, gameOver, onGa
     }
 
     useEffect(()=>{
-        if(score % generalSettings.celebrationPerScore === 0 && score !== 0 ){
+        const dividedScore = Math.floor(score % generalSettings.celebrationPerScore)
+        if(dividedScore > previousCelebrationScore && previousCelebrationScore > 0 ){
+            setPreviousCelebrationScore(dividedScore)
             setConffeti(true)
             const timeout = setTimeout(()=>{
                 setConffeti(false)
@@ -57,13 +61,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ difficulty, gameOver, onGa
                 <Meteor
                     key={meteor.id}
                     {...meteor}
-                    onDestroy={() => handleMeteorDestroy(meteor.id)}
+                    onDestroy={handleMeteorDestroy}
                     onReachBottom={handleMeteorReachBottom}
                 />
             ))}
             {
                 conffeti && <Confetti width={532} height={379} recycle={false} />
             }
+            <div className={styles.score}>{score}</div>
         </div>
     )
 }

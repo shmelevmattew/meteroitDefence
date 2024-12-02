@@ -2,13 +2,14 @@
 
 import {useState, useEffect, FC} from 'react'
 import styles from '../styles/Meteor.module.css'
+import {meteoriteSetting} from "../consts/settings";
 
 interface MeteorProps {
     id: number
     x: number
-    size: 'small' | 'large'
-    onDestroy: () => void
-    onReachBottom: () => void
+    size: 'small' | 'large' | 'bonus'
+    onDestroy: (id: number, score : number ) => void
+    onReachBottom: ( ) => void
 }
 
 export const Meteor: FC<MeteorProps> = ({ id, x, size, onDestroy, onReachBottom }) => {
@@ -20,10 +21,10 @@ export const Meteor: FC<MeteorProps> = ({ id, x, size, onDestroy, onReachBottom 
             setY(prevY => {
                 if (prevY >= 280) {
                     clearInterval(interval)
-                    onReachBottom()
+                    meteoriteSetting[size].deadly ? onReachBottom() : onDestroy(id, 0)
                     return prevY
                 }
-                return prevY + 5
+                return prevY + meteoriteSetting[size].speed
             })
         }, 50)
 
@@ -32,9 +33,11 @@ export const Meteor: FC<MeteorProps> = ({ id, x, size, onDestroy, onReachBottom 
 
     const handleClick = () => {
         setClicks(prevClicks => {
+
             const newClicks = prevClicks + 1
-            if ((size === 'small' && newClicks === 1) || (size === 'large' && newClicks === 2)) {
-                onDestroy()
+            if (newClicks >= meteoriteSetting[size].clicksRequired) {
+                console.log("123")
+                onDestroy(id, meteoriteSetting[size].score)
             }
             return newClicks
         })

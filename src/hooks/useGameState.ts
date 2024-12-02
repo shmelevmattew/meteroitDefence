@@ -5,8 +5,8 @@ export const useGameState = () => {
     const [difficulty, setDifficulty] = useState('medium')
     const [gameOver, setGameOver] = useState(false)
 
-    const incrementScore = useCallback(() => {
-        setScore(prevScore => prevScore + 1)
+    const incrementScore = useCallback((score : number) => {
+        setScore(prevScore => prevScore + score)
     }, [])
 
     const restartGame = () => {
