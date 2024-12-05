@@ -3,7 +3,11 @@ import './App.css';
 import MeteorDefense from "./components/MeteorDefense";
 
 function App() {
-  return <MeteorDefense />
+  return(
+      <>
+        <MeteorDefense />
+      </>
+  )
 }
 
 export default App;

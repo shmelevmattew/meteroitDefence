@@ -7,10 +7,12 @@ import { Button } from './Button'
 import { useGameState } from '../hooks/useGameState'
 import styles from '../styles/MeteorDefense.module.css'
 import {difficultiesEnum} from "../consts/settings";
+import HyperModal from "react-hyper-modal";
+import {HelperModal} from "./HelperModal";
 
 export default function MeteorDefense() {
     const [isGameStarted, setIsGameStarted] = useState(false)
-    const [showHelpModal,setShowHelpModal] = useState(false)
+    const [showHelpModal,setShowHelpModal] = useState(true)
     const {
         score,
         difficulty,
@@ -32,7 +34,9 @@ export default function MeteorDefense() {
 
 
     return (
+
         <div className={styles.container}>
+            <HelperModal/>
             {!isGameStarted || gameOver ? (
                 <div className={styles.gameOver}>
                     <DifficultySelector difficulty={difficulty as difficultiesEnum} setDifficulty={setDifficulty} />
@@ -43,6 +47,7 @@ export default function MeteorDefense() {
                         <p className={styles.gameOverText}>Игра окончена! Ваш счет: {score}</p>
                     )}
                 </div>
+
             ) : (
                 <>
                     {/*<div className={styles.score}>Счет: {score}</div>*/}
@@ -55,6 +60,7 @@ export default function MeteorDefense() {
                     />
                 </>
             )}
+
         </div>
     )
 }

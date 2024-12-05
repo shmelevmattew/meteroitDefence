@@ -16,7 +16,7 @@ export const settings : Record<difficultiesEnum, difficultySettings> = {
         meteorInterval : 1500
     },
     [difficultiesEnum.hard] : {
-        meteorInterval : 1000
+        meteorInterval : 700
     }
 }
 
