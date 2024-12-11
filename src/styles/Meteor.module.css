@@ -21,3 +21,8 @@
     height: 3rem;
     background: url("../../src/assets/bonusMeteorite.png") center center/cover;
 }
+.parachute{
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+}

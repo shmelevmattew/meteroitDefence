@@ -4,7 +4,7 @@ import {difficultiesEnum} from "../consts/settings";
 export const useGameState = () => {
     const [score, setScore] = useState(0)
     const [difficulty, setDifficulty] = useState("normal")
-    const [gameOver, setGameOver] = useState(false)
+    const [gameOver, setGameOver] = useState(true)
 
     const incrementScore = useCallback((score : number) => {
         setScore(prevScore => prevScore + score)

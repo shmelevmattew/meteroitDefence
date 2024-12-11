@@ -4,29 +4,61 @@ import {Button} from "./Button";
 import {inspect} from "util";
 import styles from "../styles/HelperModal.module.css"
 import {meteoriteSetting} from "../consts/settings";
-export const HelperModal = () => {
+import {getScores, TableRow} from "../api/service/score";
+export const HelperModal = ({displayButtons = true}) => {
     const [index, setIndex] = useState(-1)
+    const [leadersModal,setLeadersModal] = useState(false)
+    const [scores,setScores] = useState<TableRow[]>()
+
+    function openLeadersModal(){
+        if(!scores){
+            getScores().then((res)=>{
+                setLeadersModal(true)
+                setScores(res)
+            })
+        }else{
+            setLeadersModal(true)
+        }
+
+    }
     return (
         <>
             <HyperModal
                 classes={{
                     contentClassName: 'modal-content',
+                    wrapperClassName:styles.modal,
+                    portalWrapperClassName:styles.modal
                 }}
                 stackable
                 stackableIndex={index}
                 unmountOnClose
+
                 beforeClose={()=>{
                     setIndex(-1)
                 }}
                 renderOpenButton={(requestOpen) => {
                     return (
-                        <Button
-                            onClick={()=>{
-                                setIndex(0)
-                                requestOpen()
-                            }}
-                        >
-                        </Button>
+                        <div className={styles.buttonWrapper}>
+                            {
+                                displayButtons &&
+                                <>
+                                    <Button
+
+                                        onClick={()=>{
+                                            setIndex(0)
+                                            requestOpen()
+                                        }}
+                                    >
+                                        ?
+                                    </Button>
+                                    <Button
+                                        onClick={openLeadersModal}
+                                    >
+                                        Лидеры
+                                    </Button>
+                                </>
+                            }
+                        </div>
                     )
                 }}
                 stackContentSettings={{
@@ -82,7 +114,7 @@ export const HelperModal = () => {
                             </Button>
                         </div>
                         <div className={styles.dialog}>
-                            <div color={styles.text}>Маленький метеорит треубет {meteoriteSetting["small"].clicksRequired} кликов для уничтожения и приносит {meteoriteSetting["small"].score} очков </div>
+                            <div color={styles.text}>Маленький метеорит треубет {meteoriteSetting["small"].clicksRequired} кликов для остановки и приносит {meteoriteSetting["small"].score} очков </div>
                             <Button
                                 className={styles.button}
                                 onClick={() => setIndex(6)}
@@ -91,7 +123,7 @@ export const HelperModal = () => {
                             </Button>
                         </div>
                         <div className={styles.dialog}>
-                            <div color={styles.text}>Большой метеорит треубет {meteoriteSetting["large"].clicksRequired} кликов для уничтожения и приносит {meteoriteSetting["large"].score} очков </div>
+                            <div color={styles.text}>Большой метеорит треубет {meteoriteSetting["large"].clicksRequired} кликов для остановки и приносит {meteoriteSetting["large"].score} очков </div>
                             <Button
                                 className={styles.button}
                                 onClick={() => setIndex(7)}
@@ -100,18 +132,61 @@ export const HelperModal = () => {
                             </Button>
                         </div>
                         <div className={styles.dialog}>
-                            <div color={styles.text}>Да, без бонусов была бы скука полная <br/> Бонусный метеорит очень быстрый треубет {meteoriteSetting["bonus"].clicksRequired} кликов для уничтожения и приносит {meteoriteSetting["large"].score} очков <br/> Однако он не закончит игру в случае если коснется земли</div>
+                            <div color={styles.text}>Да, без бонусов была бы скука полная <br/> Бонусный метеорит очень быстрый треубет {meteoriteSetting["bonus"].clicksRequired} кликов для остановки и приносит {meteoriteSetting["bonus"].score} очков <br/> Однако он не закончит игру в случае если коснется земли</div>
+                            <Button
+                                className={styles.button}
+                                onClick={() => setIndex(8)}
+                            >
+                                Ну, все понятно
+                            </Button>
+                        </div>
+                        <div className={styles.dialog}>
+                            <div color={styles.text}>Ах, да, чуть не забыл<br/> У нас динозавров строгая бухгалтерия <br/> Так что очки засчитываются только по факту остановки метеорита</div>
+                            <Button
+                                className={styles.button}
+                                onClick={() => setIndex(9)}
+                            >
+                                Ну, теперь точно понятно
+                            </Button>
+                        </div>
+
+                        <div className={styles.dialog}>
+                            <div color={styles.text}>Ну и вешай парашуты вовремя, если повесить их прямо у  земли, то метеорит просто не успеет остановиться <br/> Всё всё, теперь точно можешь идти</div>
                             <Button
                                 className={styles.button}
                                 onClick={() => props.handleClose()}
                             >
-                                Ну, все понятно
+                                ...
                             </Button>
                         </div>
                     </ModalStack>
                 )}
             </HyperModal>
             { index >= 0 && <img src={require('../assets/dinosaur.png')} className={styles.dino}/>}
+            <HyperModal
+                isOpen={leadersModal}
+                requestClose={()=>setLeadersModal(false)}
+                classes={{wrapperClassName:styles.modal,portalWrapperClassName:styles.modal}}
+                renderCloseIcon={()=>(<></>)}
+            >
+                <div className={styles.scroll}>
+                    <ol className={styles.list}>
+                        {
+                            scores?.map((el)=>{
+                                return (
+
+                                        <li className={styles.row} key={el.id}>
+                                            <div className={styles.name}>{el.name}</div>
+                                            <div className={styles.dots}></div>
+                                            <div className={styles.score}>{el.score}</div>
+                                        </li>
+                                )
+                            })
+                        }
+                    </ol>
+
+                </div>
+            </HyperModal>
         </>
     );
 }

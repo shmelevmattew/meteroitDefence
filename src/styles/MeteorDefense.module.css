@@ -9,7 +9,11 @@
     color: white;
     padding: 1rem;
 }
-
+.button{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
 .title {
     font-size: 2.25rem;
     font-weight: bold;
@@ -23,6 +27,7 @@
 
 .gameOver {
     text-align: center;
+    gap: 5px;
 }
 
 .gameOverText {
@@ -30,12 +35,80 @@
     margin-top: 1rem;
     color: #3b82f6;
 }
+.saveResultsText{
+    color: #3b82f6;
+}
 .modal{
     position: absolute;
     top: 0;
 }
+.cutscene{
+    position: relative;
+    top: 120px;
+    left: 15px;
+    width: 532px;
+    height: 379px;
+    overflow: hidden;
+    border-radius: 50px;
+    background: black;
+}
+.leadersButton{
+    position: absolute;
+    left: 50px;
+    top: 50px;
+
+}
+.loginInput {
+    --ReactInputVerificationCode-itemWidth: 2.9rem;
+    --ReactInputVerificationCode-itemHeight: 3.5rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.centered{
+    margin: 0 auto;
+    display: block;
+}
+.error{
+    color: red;
+}
+@media (max-width: 425px) {
+    .loginInput{
+        font-size: 10px;
+        --ReactInputVerificationCode-itemWidth: 2.5rem;
+    }
+    .button{
+        font-size: 10px;
+    }
+    .loginInputButton {
+        padding: 10px;
+        font-size: 10px;
+    }
+}
+
 @media (max-width: 786px) {
     .container {
         background: #1a202c
     }
+    .cutscene{
+        width: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        position: relative;
+        justify-content: flex-start;
+    }
+    .centered{
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+
+
+
 }

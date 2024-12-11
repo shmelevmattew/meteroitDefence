@@ -45,8 +45,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ difficulty, gameOver, onGa
 
     useEffect(()=>{
         const dividedScore = Math.floor(score / generalSettings.celebrationPerScore)
-        console.log(dividedScore)
-
         if(dividedScore > previousCelebrationScore && dividedScore !== 0 ){
             setPreviousCelebrationScore(dividedScore)
             setConffeti(true)

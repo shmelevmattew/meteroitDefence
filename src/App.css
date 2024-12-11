@@ -24,3 +24,36 @@
   margin-top: 1rem;
 }
 
+.ReactInputVerificationCode-item {
+  position: relative;
+  color:black !important;
+  font-weight: 500;
+  background: none;
+  border-bottom: #3b82f6;
+  box-shadow: 0 0 0 1px  #3b82f6 !important;
+  z-index: 1;
+}
+.ReactInputVerificationCode-item::placeholder {
+  color: #3b82f6;
+}
+
+@media (max-width: 768px) {
+  .ReactInputVerificationCode__item:after{
+    background-color: white;
+  }
+  .ReactInputVerificationCode-item {
+    color: white !important;
+    width: 3rem !important;
+    height: 3rem !important;
+  }
+  .ReactInputVerificationCode-item::placeholder {
+    color: white;
+    opacity: 0.7;
+  }
+}
+
+
+
+
+
+
