@@ -12,8 +12,9 @@ import {HelperModal} from "./HelperModal";
 import ReactInputVerificationCode, {
     ReactInputVerificationCodeProps,
 } from 'react-input-verification-code';
-import {addScore} from "../api/service/score";
+import {addScore, getByName, insertScore} from "../api/service/score";
 import {log} from "util";
+import {useLastEnteredName} from "../hooks/useLastEnteredName";
 
 export default function MeteorDefense() {
     const [isGameStarted, setIsGameStarted] = useState(false)
@@ -21,6 +22,7 @@ export default function MeteorDefense() {
     const [displayModal,setDisplayModal] = useState(true)
     const [saveResults,setSaveResults] = useState(true)
     const [login,setLogin] = useState<any>("")
+    const [shouldUpdate,setShouldUpdate] = useState(false)
     const vidRef = useRef<any>(null);
     const {
         score,
@@ -31,6 +33,10 @@ export default function MeteorDefense() {
         incrementScore,
         restartGame
     } = useGameState()
+    const [
+        lastEnteredName,
+        setLastEnteredName
+    ] = useState("")
 
     useEffect(()=>{
         console.log(login)
@@ -53,13 +59,36 @@ export default function MeteorDefense() {
     }
 
     function sendResults(){
-        addScore(login,score).then((res)=>setSaveResults(false))
+        if(login.length === 4){
+            getByName(login).then(res=>{
+                if(res.length > 0) {
+                    if (res[0].score < score){
+                        insertScore(score,login).then(()=>{
+                            setSaveResults(false)
+                            setLogin("")
+                        })
+                    }else{
+                        setSaveResults(false)
+                        setLogin("")
+                    }
+
+                } else{
+                    addScore(login,score).then((res)=>{
+                        setSaveResults(false)
+                        setLogin("")
+                    })
+                }
+            })
+            setLastEnteredName(login)
+            setShouldUpdate(prev=>!prev)
+
+        }
     }
 
     return (
 
         <div className={styles.container}>
-            <HelperModal displayButtons={displayModal}/>
+            <HelperModal displayButtons={displayModal} lastEnteredName={lastEnteredName} shouldUpdate={shouldUpdate}/>
             {
                 cutscene? (
                     <>
@@ -98,7 +127,7 @@ export default function MeteorDefense() {
                                                         Отправить
                                                     </Button>
                                                 </div>
-                                                <p className={styles.error}>Заполните все 4 буквы!</p>
+                                                <p className={styles.error}>Заполните все 4 буквы (или цифры)!</p>
                                             </>
                                         }
 

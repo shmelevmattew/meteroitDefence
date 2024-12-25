@@ -23,10 +23,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({ difficulty, gameOver, onGa
     //width: 532px;
     //     height: 379px;
     useEffect(() => {
+
         if (gameOver) {
             setMeteors([])
             return
         }
+
         const interval = setInterval(() => {
             setMeteors(prevMeteors => [...prevMeteors, generateMeteor()])
         }, settings[difficultiesEnum[difficulty]].meteorInterval)

@@ -1,26 +1,59 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import HyperModal, {ModalStack} from 'react-hyper-modal';
 import {Button} from "./Button";
 import {inspect} from "util";
 import styles from "../styles/HelperModal.module.css"
 import {meteoriteSetting} from "../consts/settings";
-import {getScores, TableRow} from "../api/service/score";
-export const HelperModal = ({displayButtons = true}) => {
+import {getByName, getScores, TableRow} from "../api/service/score";
+import {useLastEnteredName} from "../hooks/useLastEnteredName";
+export const HelperModal = ({displayButtons = true,lastEnteredName = "",shouldUpdate = false}) => {
     const [index, setIndex] = useState(-1)
     const [leadersModal,setLeadersModal] = useState(false)
-    const [scores,setScores] = useState<TableRow[]>()
-
+    const [scores,setScores] = useState<TableRow[]>([])
+    const [userUpdated,setUserUpdated] = useState(true)
     function openLeadersModal(){
-        if(!scores){
+        setLeadersModal(true)
+        if(userUpdated){
             getScores().then((res)=>{
-                setLeadersModal(true)
-                setScores(res)
-            })
-        }else{
-            setLeadersModal(true)
-        }
+                setScores(res.slice(0,10))
+            }).then(()=>{
+                if(lastEnteredName.length > 0 && scores.length > 0){
+                    let flag = false
+                    getByName(lastEnteredName).then((res)=>{
 
+                        let index = 0
+                        let placeIndex = 0
+                        for (let place in scores){
+                            index++
+                            console.log(scores[place].name  + " " +lastEnteredName)
+
+                            if (scores[place].name == lastEnteredName){
+                                flag = true
+                                console.log(flag)
+                                // @ts-ignore
+                                console.log(res[0])
+                            }
+                        }
+                        if (!flag){
+                            console.log("not found")
+                            setScores((prev)=>{
+                                console.log("new arr")
+                                const newArr = [...prev,...res]
+                                return [...prev,...res]
+                            })
+                        }
+                        setUserUpdated(false)
+                    })
+
+                }
+            })
+        }
     }
+
+    useEffect(()=>{
+        setUserUpdated(true)
+    },[lastEnteredName,shouldUpdate])
+
     return (
         <>
             <HyperModal
@@ -172,10 +205,11 @@ export const HelperModal = ({displayButtons = true}) => {
                 <div className={styles.scroll}>
                     <ol className={styles.list}>
                         {
-                            scores?.map((el)=>{
+                            scores?.map((el,index)=>{
                                 return (
 
-                                        <li className={styles.row} key={el.id}>
+                                        <li className={styles.row} key={index}>
+
                                             <div className={styles.name}>{el.name}</div>
                                             <div className={styles.dots}></div>
                                             <div className={styles.score}>{el.score}</div>
