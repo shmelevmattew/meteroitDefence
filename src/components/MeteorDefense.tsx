@@ -66,6 +66,8 @@ export default function MeteorDefense() {
                         insertScore(score,login).then(()=>{
                             setSaveResults(false)
                             setLogin("")
+                        }).finally(()=>{
+                            setShouldUpdate(prev=>!prev)
                         })
                     }else{
                         setSaveResults(false)
@@ -76,11 +78,12 @@ export default function MeteorDefense() {
                     addScore(login,score).then((res)=>{
                         setSaveResults(false)
                         setLogin("")
+                    }).finally(()=>{
+                        setShouldUpdate(prev=>!prev)
                     })
                 }
             })
             setLastEnteredName(login)
-            setShouldUpdate(prev=>!prev)
 
         }
     }

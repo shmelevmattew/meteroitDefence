@@ -2,7 +2,7 @@ import {useState, useCallback, useEffect} from 'react'
 import {difficultiesEnum} from "../consts/settings";
 
 export const useGameState = () => {
-    const [score, setScore] = useState(0)
+    const [score, setScore] = useState(1)
     const [difficulty, setDifficulty] = useState("normal")
     const [gameOver, setGameOver] = useState(true)
 

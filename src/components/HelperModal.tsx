@@ -14,13 +14,9 @@ export const HelperModal = ({displayButtons = true,lastEnteredName = "",shouldUp
     function openLeadersModal(){
         setLeadersModal(true)
         if(userUpdated){
-            getScores().then((res)=>{
-                setScores(res.slice(0,10))
-            }).then(()=>{
                 if(lastEnteredName.length > 0 && scores.length > 0){
                     let flag = false
                     getByName(lastEnteredName).then((res)=>{
-
                         let index = 0
                         let placeIndex = 0
                         for (let place in scores){
@@ -46,12 +42,15 @@ export const HelperModal = ({displayButtons = true,lastEnteredName = "",shouldUp
                     })
 
                 }
-            })
         }
     }
 
     useEffect(()=>{
-        setUserUpdated(true)
+        getScores().then((res)=>{
+            setScores(res.slice(0,10))
+        }).then(
+            ()=>setUserUpdated(true)
+        )
     },[lastEnteredName,shouldUpdate])
 
     return (
@@ -206,6 +205,7 @@ export const HelperModal = ({displayButtons = true,lastEnteredName = "",shouldUp
                     <ol className={styles.list}>
                         {
                             scores?.map((el,index)=>{
+                                console.log(el)
                                 return (
 
                                         <li className={styles.row} key={index}>
